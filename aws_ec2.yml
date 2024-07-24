@@ -1,0 +1,25 @@
+plugin: amazon.aws.aws_ec2
+regions:
+  - us-east-1
+
+aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+
+keyed_groups:
+  - key: tags.Role
+    prefix: ""
+    separator: ""
+
+hostnames:
+  - name: private-ip-address
+  
+compose:
+  ansible_host: ip_address
+  ansible_user: ubuntu
+  ansible_ssh_private_key_file: "/home/ubuntu/Percona-DB/key01.pem"
+
+groups:
+  master: "'master' in (tags['Role'] | default(''))"
+  slave1: "'slave1' in (tags['Role'] | default(''))"
+  slave2: "'slave2' in (tags['Role'] | default(''))"
+  

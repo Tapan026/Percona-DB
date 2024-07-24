@@ -1,0 +1,7 @@
+---
+- hosts: mysql_cluster
+  hosts: all
+  remote_user: ubuntu
+  become: true
+  roles:
+    - percona

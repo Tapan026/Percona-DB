@@ -1,0 +1,25 @@
+---
+- name: percona Server Installation 
+  include_tasks: Ubuntu.yml
+
+- name: Percona Server Configuration
+  include_tasks: configure.yml
+
+- name: Including tasks to Secure MySQL Installation
+  include_tasks: secure-installation.yml
+
+- name: Percona Cluster Configuration
+  include_tasks: replication.yml
+  when: replication
+
+# - name: Percona Backup Server Configuration
+#   include_tasks: backup.yml
+#   when: backup
+
+# - name: Percona DB Operation
+#   include_tasks: database.yml
+#   when: database_creation
+
+# - name: Percona user creation
+#   include_tasks: users.yml
+#   when: users_creation

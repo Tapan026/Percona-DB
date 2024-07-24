@@ -1,0 +1,99 @@
+- name: Update apt cache
+  apt:
+    update_cache: true
+    cache_valid_time: 300
+
+- name: Add Percona Repository
+  apt_repository:
+    repo: deb [arch=amd64] https://repo.percona.com/apt {{ ansible_lsb.codename }} main
+    state: present
+
+- name: Install Percona Release package
+  apt:
+    deb: https://repo.percona.com/apt/percona-release_latest.{{ ansible_lsb.codename }}_all.deb
+    state: present
+
+- name: Enable Percona 8.0 repository
+  shell: percona-release setup ps80
+  args:
+    creates: /etc/apt/sources.list.d/percona-ps-80-release.list
+
+- name: Install Percona packages
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ percona_packages }}"
+
+- name: Ensure pymysql package
+  pip:
+    name: pymysql
+    state: present
+
+
+# ---
+# - name: "Update apt cache"
+#   apt:
+#     update_cache: true
+#     cache_valid_time: 300
+
+# - name: Add Percona Repository
+#   apt_repository:
+#     repo: deb [arch=amd64] https://repo.percona.com/apt {{ ansible_lsb.codename }} main
+#     state: present
+
+# - name: Install Percona release package
+#   apt:
+#     deb: https://repo.percona.com/apt/percona-release_latest.{{ ansible_lsb.codename }}_all.deb
+#     state: present
+
+# # - name: Enable Percona repository
+# #   command: "percona-release setup ps-{{ version | replace('.', '') }}"
+# #   changed_when: true
+
+# - name: Install Percona Server
+#   apt:
+#     name: "{{ item }}"
+#     update_cache: true
+#     state: present
+#   loop: "{{ percona_packages }}"
+#   notify:
+#     - reload_percona
+
+# - name: Ensure pymysql package
+#   pip:
+#     name: pymysql
+#     state: present
+
+
+
+# ---
+# - name: "Update apt cache"
+#   apt:
+#     update_cache: true
+#     cache_valid_time: 300
+
+# - name: Add Percona Repository
+#   apt:
+#     autoremove: true
+#     update_cache: true
+#     deb: https://repo.percona.com/apt/percona-release_latest.{{ ansible_lsb.codename }}_all.deb
+#     state: present
+
+# - name: "Enable Percona repository"
+#   command: "percona-release setup ps-{{ version | replace('.', '') }}"
+#   changed_when: true
+
+# - name: Install Percona Server
+#   apt:
+#     name: "{{ item }}"
+#     update_cache: true
+#     state: present
+#   loop:
+#     - '{{ percona_packages }}'
+#   notify:
+#     - reload_percona
+
+# - name: Ensure pymysql package
+#   pip:
+#     name: pymysql
+#     state: present
