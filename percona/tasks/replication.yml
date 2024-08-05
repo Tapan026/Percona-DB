@@ -26,37 +26,67 @@
     - mysql_replication_user.name is defined
     - inventory_hostname in groups['master']
 
-- name: Check slave replication status.
+# - name: Create replication user on master.
+#   mysql_query:
+#     login_user: root
+#     login_password: "{{ mysql_root_password }}"
+#     login_port: "{{ mysql_port }}"
+#     query: |
+#       CREATE USER '{{ mysql_replication_user.name }}'@'%' IDENTIFIED BY '{{ mysql_replication_user.password }}';
+#   when:
+#     - inventory_hostname in groups['master']
+#     - mysql_replication_user.name is defined
+#     - mysql_replication_user.password is defined
+
+# - name: Grant permissions to the replication user on master
+#   mysql_query:
+#     login_user: root
+#     login_password: "{{ mysql_root_password }}"
+#     login_port: "{{ mysql_port }}"
+#     query: |
+#       GRANT REPLICATION SLAVE ON *.* TO '{{ mysql_replication_user.name }}'@'%';
+#       FLUSH PRIVILEGES;
+#   when:
+#     - inventory_hostname in groups['master']
+#     - mysql_replication_user.name is defined
+#     - mysql_replication_user.password is defined
+
+- name: Check slave replication status
   mysql_replication:
     mode: getreplica
+    login_user: root
     login_password: "{{ mysql_root_password }}"
     login_port: "{{ mysql_port }}"
   ignore_errors: true
+  become: true
   register: slave
   when:
     - inventory_hostname in groups['slave']
     - mysql_replication_user.name is defined
 
-- name: Check master replication status.
+- name: Check master replication status
   mysql_replication:
     mode: getprimary
+    login_user: root
     login_password: "{{ mysql_root_password }}"
     login_port: "{{ mysql_port }}"
   register: master
+  become: true
   when:
     - inventory_hostname in groups['master']
 
-- name: Configure replication on the slave.
+- name: Configure replication on the slave
   mysql_replication:
     mode: changeprimary
     primary_host: "{{ master_address }}"
     primary_user: "{{ mysql_replication_user.name }}"
-    primary_port: "{{ mysql_port }}"
-    login_password: "{{ mysql_root_password }}"
-    login_port: "{{ mysql_port }}"
     primary_password: "{{ mysql_replication_user.password }}"
+    primary_port: "{{ mysql_port }}"
     primary_log_file: "{{ hostvars[groups['master'][0]].master.File }}"
     primary_log_pos: "{{ hostvars[groups['master'][0]].master.Position }}"
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    login_port: "{{ mysql_port }}"
   ignore_errors: true
   when:
     - (slave.Is_Replica is defined and not slave.Is_Replica) or (slave.Is_Replica is not defined and slave is failed)
@@ -64,9 +94,10 @@
     - mysql_replication_user.name is defined
     - mysql_replication_user.password is defined
 
-- name: Start replication.
+- name: Start replication
   mysql_replication:
     mode: startreplica
+    login_user: root
     login_password: "{{ mysql_root_password }}"
     login_port: "{{ mysql_port }}"
   when:

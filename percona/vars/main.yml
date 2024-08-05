@@ -3,8 +3,10 @@ version: 8.0
 percona_packages:
   - gnupg2
   - python3-pip
-  - percona-server-server-8.0
-  - percona-xtrabackup-80
+  - percona-server-server
+  # - percona-xtrabackup-80
+  # - percona-xtradb-cluster-server
+  # - percona-xtradb-cluster-client
   # - percona-toolkit
   # - percona-orchestrator
   # - percona-orchestrator-cli
@@ -14,6 +16,7 @@ percona_packages:
   # - percona-mysql-router
 
 mysql_daemon: mysql
+mysql_port: 3306
 mysql_config_file: /etc/mysql/my.cnf
 mysql_slow_query_log_file: /var/log/mysql/mysql-slow.log
 mysql_socket: /var/run/mysqld/mysqld.sock

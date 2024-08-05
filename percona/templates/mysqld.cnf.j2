@@ -53,7 +53,6 @@ long_query_time = {{ mysql_slow_query_time }}
 # Replication
 server-id = {{ mysql_server_id }}
 {% endif %}
-
 {% if inventory_hostname in groups['master'] %}
 # Replication
 server-id = {{ mysql_server_id }}

@@ -16,10 +16,10 @@
 #   include_tasks: backup.yml
 #   when: backup
 
-# - name: Percona DB Operation
-#   include_tasks: database.yml
-#   when: database_creation
+- name: Percona DB Operation
+  include_tasks: database.yml
+  when: database_creation
 
-# - name: Percona user creation
-#   include_tasks: users.yml
-#   when: users_creation
+- name: Percona user creation
+  include_tasks: users.yml
+  when: users_creation

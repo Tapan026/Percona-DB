@@ -1,5 +1,5 @@
 ---
-- hosts: mysql_cluster
+- name: percona_cluster
   hosts: all
   remote_user: ubuntu
   become: true
