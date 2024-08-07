@@ -3,17 +3,9 @@ version: 8.0
 percona_packages:
   - gnupg2
   - python3-pip
+  - python3-pymysql
   - percona-server-server
   # - percona-xtrabackup-80
-  # - percona-xtradb-cluster-server
-  # - percona-xtradb-cluster-client
-  # - percona-toolkit
-  # - percona-orchestrator
-  # - percona-orchestrator-cli
-  # - percona-orchestrator-client
-  # - percona-mysql-shell
-  # - proxysql2
-  # - percona-mysql-router
 
 mysql_daemon: mysql
 mysql_port: 3306

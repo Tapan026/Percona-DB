@@ -26,12 +26,6 @@
     creates: /etc/apt/sources.list.d/percona-ps-80-release.list
   become: true
 
-- name: Enable Percona XtraDB Cluster repository
-  shell: percona-release enable pxc-80 release
-  args:
-    creates: /etc/apt/sources.list.d/percona-pxc-80-release.list
-  become: true
-  
 - name: Update apt cache after enabling Percona 8.0 repository
   apt:
     update_cache: true
@@ -46,10 +40,19 @@
   notify:
     - reload_percona
 
-- name: Ensure pymysql package
-  pip:
-    name: pymysql
-    state: present
+# - name: Ensure pymysql package
+#   pip:
+#     name: pymysql
+#     state: present
+#     executable: /usr/bin/pip3
+
+
+
+
+# - name: Install passlib using pip
+#   ansible.builtin.pip:
+#     name: passlib
+#     state: present
 
 # ---
 # - name: "Update apt cache"

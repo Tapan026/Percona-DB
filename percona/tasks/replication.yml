@@ -26,31 +26,6 @@
     - mysql_replication_user.name is defined
     - inventory_hostname in groups['master']
 
-# - name: Create replication user on master.
-#   mysql_query:
-#     login_user: root
-#     login_password: "{{ mysql_root_password }}"
-#     login_port: "{{ mysql_port }}"
-#     query: |
-#       CREATE USER '{{ mysql_replication_user.name }}'@'%' IDENTIFIED BY '{{ mysql_replication_user.password }}';
-#   when:
-#     - inventory_hostname in groups['master']
-#     - mysql_replication_user.name is defined
-#     - mysql_replication_user.password is defined
-
-# - name: Grant permissions to the replication user on master
-#   mysql_query:
-#     login_user: root
-#     login_password: "{{ mysql_root_password }}"
-#     login_port: "{{ mysql_port }}"
-#     query: |
-#       GRANT REPLICATION SLAVE ON *.* TO '{{ mysql_replication_user.name }}'@'%';
-#       FLUSH PRIVILEGES;
-#   when:
-#     - inventory_hostname in groups['master']
-#     - mysql_replication_user.name is defined
-#     - mysql_replication_user.password is defined
-
 - name: Check slave replication status
   mysql_replication:
     mode: getreplica
